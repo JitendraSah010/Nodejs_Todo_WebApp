@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const ejs = require('ejs');
 const bodyParser = require('body-parser');
@@ -10,18 +11,18 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.static('public'));
-mongoose.connect('mongodb+srv://jitendrasah:jitendra1234@cluster0.rdgu0z9.mongodb.net/?retryWrites=true&w=majority').then(  ()=>{
+mongoose.connect(process.env.SECRET_KEY).then(  ()=>{
     console.log('MongoDB is connected');
 })
 // ---------------------------- Setup Session-------------------------------
 // store session on database
 const StoreSession = new mongoDbSession({
-    uri: 'mongodb+srv://jitendrasah:jitendra1234@cluster0.rdgu0z9.mongodb.net/?retryWrites=true&w=majority',
+    uri: process.env.SECRET_KEY,
     collection: 'sessions'
 })
 
 app.use(session({
-    secret: 'This is a secret',      //secret ensure that our cookie and session are encrypted
+    secret: process.env.PASWORD_SECRET,      //secret ensure that our cookie and session are encrypted
     resave: false,                   // everytime some changes is done then, i don't want to save it
     saveUninitialized: false,        // uninitialised session isnot saved
     store: StoreSession,
